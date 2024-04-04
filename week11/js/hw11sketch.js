@@ -9,6 +9,9 @@ let swoopImage;
 var health = 3;
 var score = 0;
 var myTime = 5;
+const particles = [];
+var currentX = 100, currentY = 500;
+
 
 function preload() {
    idlePaths = loadStrings("textFiles/idle.txt");
@@ -81,15 +84,15 @@ function draw()
             myAnimation.updatePosition('idle');
             
         }  
-        else if(myAnimation.isColliding(patternsImage))
+        if(myAnimation.isColliding(patternsImage))
         {
-            patternsImage.getCurrentSprite.remove();
+            patternsImage.remove();
             score += 1;
             
         }  
-        else if(myAnimation.isColliding(swoopImage))
+        if(myAnimation.isColliding(swoopImage))
         {
-            swoopImage.getCurrentSprite.remove();
+            swoopImage.remove();
             health -= 1;
             
         }  
@@ -104,15 +107,15 @@ function draw()
             myAnimation.drawAnimation('idle');
             myAnimation.updatePosition('idle');  
         }  
-        else if(myAnimation.isColliding(patternsImage))
+        if(myAnimation.isColliding(patternsImage))
         {
-            patternsImage.getCurrentSprite.remove();
+            patternsImage.remove();
             score += 1;
             
         }  
-        else if(myAnimation.isColliding(swoopImage))
+        if(myAnimation.isColliding(swoopImage))
         {
-            swoopImage.getCurrentSprite.remove();
+            swoopImage.remove();
             health -= 1;
             
         }  
@@ -127,15 +130,15 @@ function draw()
             myAnimation.updatePosition('idle');
             
         }  
-        else if(myAnimation.isColliding(patternsImage))
+        if(myAnimation.isColliding(patternsImage))
         {
-            patternsImage.getCurrentSprite.remove();
+            patternsImage.remove();
             score += 1;
             
         }  
-        else if(myAnimation.isColliding(swoopImage))
+        if(myAnimation.isColliding(swoopImage))
         {
-            swoopImage.getCurrentSprite.remove();
+            swoopImage.remove();
             health -= 1;
             
         }  
@@ -151,15 +154,15 @@ function draw()
             myAnimation.updatePosition('idle');
             
         }  
-        else if(myAnimation.isColliding(patternsImage))
+        if(myAnimation.isColliding(patternsImage))
         {
-            patternsImage.getCurrentSprite.remove();
+            patternsImage.remove();
             score += 1;
             
         }  
-        else if(myAnimation.isColliding(swoopImage))
+        if(myAnimation.isColliding(swoopImage))
         {
-            swoopImage.getCurrentSprite.remove();
+            swoopImage.remove();
             health -= 1;
             
         }  
@@ -172,8 +175,26 @@ function draw()
         myAnimation.drawAnimation('idle');
     } 
     
+    if(myAnimation.isColliding(patternsImage))
+        {
+            patternsImage.remove();
+            score += 1;
+            
+        }  
+
+    if(myAnimation.isColliding(swoopImage))
+        {
+            swoopImage.remove();
+            health -= 1;
+            
+        }  
+
+
     patternsImage.debug = mouseIsPressed;
+        
     
+    
+
     if(health <= 0)
             {
                 textSize(40);
@@ -181,8 +202,11 @@ function draw()
                 myAnimation.drawAnimation('dead');
                 myAnimation.updatePosition('dead');
             }
-    if(score >= 10)
+    if(score >= 3)
             {
+                smoke();
+                patternsImage.remove();
+                swoopImage.remove()
                 textSize(40);
                 text("Winner!!!", 300, 300);
             }
@@ -201,30 +225,35 @@ function changeTime()
         patternsImage.img = "images/Patterns Revealed.jpg";
         patternsImage.scale = 0.05;
         patternsImage.diameter = 50;
-        if(myAnimation.isColliding(patternsImage))
-        {
-            patternsImage.remove();
-            score += 1;
-            
-        }  
+        
 
         swoopImage = new Sprite(random(750), random(550),50,50, 'static');
         swoopImage.img = "images/Glacial Swoop.jpg";
         swoopImage.scale = 0.02;
         swoopImage.diameter = 50;
-        if(myAnimation.isColliding(swoopImage))
-        {
-            swoopImage.remove();
-            health -= 1;
-            
-        }  
+       
 
-        flobImage = new Sprite(random(750), random(550),50,50, 'static');
+        /*flobImage = new Sprite(random(750), random(550),50,50, 'static');
         flobImage.img = "images/FlobSolo copy.png";
         flobImage.scale = 0.05;
-        flobImage.diameter = 100;
+        flobImage.diameter = 100;*/
         
 
      }
 }
 
+function smoke()
+{
+   
+    for (let i = 0; i < 75; i++) {
+        let p = new Particle(currentX, currentY);
+        particles.push(p);
+      }
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].show();
+        if (particles[i].finished()) {
+          particles.splice(i, 1);
+        }
+      }
+}
